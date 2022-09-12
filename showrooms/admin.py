@@ -1,3 +1,5 @@
 from django.contrib import admin
+from showrooms.models import ShowroomProfile, ShowroomCar
 
-# Register your models here.
+admin.site.register(ShowroomProfile)
+admin.site.register(ShowroomCar)

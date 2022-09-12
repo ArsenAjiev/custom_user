@@ -17,4 +17,4 @@ class Car(CommonInfo):
     color = models.CharField(max_length=50)
 
     def __str__(self):
-        return f'make: {self.make} - model: {self.model} - color: {self.color}'
+        return f'Make:{self.make} -- Model:{self.model} -- Color:{self.color}'
