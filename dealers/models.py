@@ -22,7 +22,7 @@ class DealerProfile(models.Model):
         default=1990, validators=[MinValueValidator(1990), MaxValueValidator(2022)]
     )
     description = models.TextField(blank=True, null=True)
-    cars = models.ManyToManyField(Car, through="DealerCar")
+    car = models.ManyToManyField(Car, through="DealerCar")
     balance = models.DecimalField(
         max_digits=15, decimal_places=2, validators=[MinValueValidator(0.00)], default=0
     )

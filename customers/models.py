@@ -34,7 +34,7 @@ class CustomerProfile(CommonInfo):
         max_digits=15, decimal_places=2, validators=[MinValueValidator(0.00)], default=0
     )
 
-    cars = models.ManyToManyField(Car, through="CustomerCar")
+    car = models.ManyToManyField(Car, through="CustomerCar")
 
     def __str__(self):
         return f"title: {self.title} - balance: {self.balance}"

@@ -1,20 +1,20 @@
 from rest_framework.response import Response
 import requests
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 
 from users.serializers import UserSerializer
 from users.models import User
 
 
-class UsersViewSet(viewsets.GenericViewSet):
+class UsersViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
+
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
-    def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='user-test')
     def user_test(self, request):
