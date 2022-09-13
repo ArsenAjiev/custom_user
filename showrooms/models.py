@@ -40,7 +40,7 @@ class ShowroomProfile(CommonInfo):
     car = models.ManyToManyField(Car, through="ShowroomCar")
 
     def __str__(self):
-        return f"Owner:{self.owner.username} -- f'Name:{self.name} - Balance:{self.balance}"
+        return f"Owner:{self.owner.username} -- Name:{self.name} - Balance:{self.balance}"
 
 
 class ShowroomCar(CommonInfo):

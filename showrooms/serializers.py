@@ -1,9 +1,12 @@
 from rest_framework import serializers
 from showrooms.models import ShowroomProfile, ShowroomCar, TransactionToCustomer
 from cars.serializers import CarSerializer
+from django_countries.serializer_fields import CountryField
 
 
 class ShowroomProfileSerializer(serializers.ModelSerializer):
+    location = CountryField()
+
     class Meta:
         model = ShowroomProfile
         fields = '__all__'
