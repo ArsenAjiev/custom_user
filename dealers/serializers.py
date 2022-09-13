@@ -2,9 +2,13 @@ from rest_framework import serializers
 from dealers.models import DealerProfile, DealerCar, TransactionToShowroom
 from showrooms.serializers import ShowroomProfileSerializer
 from cars.serializers import CarSerializer
+from users.serializers import UserSerializer
 
 
 class DealerProfileSerializer(serializers.ModelSerializer):
+
+    owner = UserSerializer(read_only=True)
+
     class Meta:
         model = DealerProfile
         fields = '__all__'

@@ -4,18 +4,22 @@ from showrooms.serializers import ShowroomProfileSerializer, ShowroomCarSerializ
 
 
 class ShowroomProfileViewSet(
+    viewsets.GenericViewSet,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    mixins.UpdateModelMixin,
 ):
     serializer_class = ShowroomProfileSerializer
     queryset = ShowroomProfile.objects.all()
 
 
 class ShowroomCarViewSet(
+    viewsets.GenericViewSet,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    mixins.UpdateModelMixin,
 ):
     serializer_class = ShowroomCarSerializer
     queryset = ShowroomCar.objects.all()

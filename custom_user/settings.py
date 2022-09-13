@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'showrooms',
     'cars',
     'users',
+    'sales',
 
     'rest_framework',
     "rest_framework_simplejwt",

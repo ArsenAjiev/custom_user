@@ -4,18 +4,22 @@ from customers.serializers import CustomerProfileSerializer, CustomerCarSerializ
 
 
 class CustomerProfileViewSet(
+    viewsets.GenericViewSet,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    mixins.UpdateModelMixin,
 ):
     serializer_class = CustomerProfileSerializer
     queryset = CustomerProfile.objects.all()
 
 
 class CustomerCarViewSet(
+    viewsets.GenericViewSet,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    mixins.UpdateModelMixin,
 ):
     serializer_class = CustomerCarSerializer
     queryset = CustomerCar.objects.all()

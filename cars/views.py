@@ -4,9 +4,11 @@ from cars.serializers import CarSerializer
 
 
 class CarViewSet(
+    viewsets.GenericViewSet,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    mixins.UpdateModelMixin,
 ):
 
     serializer_class = CarSerializer

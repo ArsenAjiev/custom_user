@@ -4,21 +4,20 @@ from dealers.serializers import DealerProfileSerializer, DealerCarSerializer, Tr
 
 
 class DealerProfileViewSet(
+    viewsets.GenericViewSet,
     mixins.ListModelMixin,
+    mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    mixins.UpdateModelMixin,
 ):
     serializer_class = DealerProfileSerializer
     queryset = DealerProfile.objects.all()
 
 
-class DealerCarViewSet(
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
-):
-    serializer_class = DealerCarSerializer
+
+class DealerCarViewSet(viewsets.ModelViewSet):
     queryset = DealerCar.objects.all()
+    serializer_class = DealerCarSerializer
 
 
 class TransactionToShowroomViewSet(
