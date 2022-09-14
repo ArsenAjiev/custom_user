@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  web_1:
+    container_name: web_1
+    build: .
+    command: sh ./entrypoint.sh
+    volumes:
+      - .:/usr/src/app/
+      - static-files_1:/usr/src/app/static
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db_1
+  db_1:
+    container_name: db_1
+    image: postgres:14
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data_1:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  redis_1:
+    container_name: redis_1
+    image: redis
+    restart: always
+
+  celery_1:
+    container_name: celery_1
+    restart: always
+    build:
+      context: .
+    command: celery -A custom_user worker -l INFO
+    volumes:
+      - .:/usr/src/app/
+    env_file:
+      - ./.env
+    depends_on:
+      - db_1
+      - redis_1
+
+  celery-beats_1:
+      container_name: celery-beats_1
+      restart: always
+      build:
+        context: .
+      command: celery -A custom_user beat -l INFO
+      env_file:
+        - ./.env
+      volumes:
+        - .:/usr/src/app/
+      depends_on:
+        - db_1
+        - redis_1
+
+  flower_1:
+    container_name: flower_1
+    build: .
+    command: celery -A custom_user flower --port=5555
+    ports:
+      - 5556:5555
+    env_file:
+      - ./.env
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - web_1
+      - redis_1
+      - celery_1
+      - celery-beats_1
+
+  nginx_1:
+    container_name: nginx_1
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - static-files_1:/app/static
+
+    depends_on:
+      - web_1
+
+volumes:
+  postgres_data_1:
+  static-files_1:
+

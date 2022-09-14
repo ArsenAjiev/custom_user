@@ -44,7 +44,7 @@ class CustomerProfile(CommonInfo):
 class CustomerCar(CommonInfo):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
-    showroom = models.ForeignKey("dealers.DealerProfile", on_delete=models.CASCADE)
+    showroom = models.ForeignKey("showrooms.ShowroomProfile", on_delete=models.CASCADE)
     count = models.IntegerField(default=1)
     price = models.DecimalField(
         max_digits=15,
@@ -54,4 +54,5 @@ class CustomerCar(CommonInfo):
     )
 
     def __str__(self):
-        return f"Car_make:{self.car.make} -- Customer_owner:{self.customer.owner}"
+        return f"Car_make:{self.car.make} -- Model:{self.car.model} -- Price:{self.price} \
+         Count: {self.count} -- Customer_owner:{self.customer.owner}"

@@ -60,4 +60,5 @@ class TransactionToShowroom(models.Model):
     count = models.IntegerField(default=1)
 
     def __str__(self):
-        return f" Car_make:{self.car.make} -- Showroom:{self.showroom.owner} -- Dealer: {self.dealer.owner}"
+        return f" Car_make:{self.car.make} Model: {self.car.model} -- Price: {self.price} -- Count: {self.count} \
+         -- Showroom:{self.showroom.owner} -- Dealer: {self.dealer.owner}"

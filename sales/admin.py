@@ -1,3 +1,6 @@
 from django.contrib import admin
+from sales.models import DealerSales, ShowroomSales
 
-# Register your models here.
+admin.site.register(DealerSales)
+admin.site.register(ShowroomSales)
+

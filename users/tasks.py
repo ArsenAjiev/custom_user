@@ -21,11 +21,6 @@ def buy_car_from_dealer():
         query_model = query.get("model")
         query_price = query.get("price")
 
-        # check what is happened!
-        with open('cars.txt', 'a') as f:
-            f.write(f'1_showroom: - query_make:{query_make}, -query model {query_model} -sh_item: {showroom_item},'
-                    f'price_type:{type(query_price)} \n')
-
         # creating QuerySet that matches the showroom's query
         dealer_cars = DealerCar.objects.filter(
             (Q(car__make__iexact=query_make) |
@@ -37,31 +32,19 @@ def buy_car_from_dealer():
             # select price
             dealer_price = d_car.price
 
+            # check sales
             if DealerSales.objects.filter(car__pk=d_car.car.pk).exists():
                 item = DealerSales.objects.get(car__pk=d_car.car.pk)
                 if item.is_active:
                     dealer_price = dealer_price - (item.discount * dealer_price)
-                    print(f'dealer_price {dealer_price}')
 
-            # check what is happened!
-            with open('cars.txt', 'a') as f:
-                f.write(f'2_dealer: - dealer_car_inst{d_car} - price {dealer_price} - car_count: {d_car.count} \n')
-
-            # if not cars then scip
+            # if not cars then skip
             if d_car.count == 0:
                 continue
 
-            # if money is not enough
+            # if money is not enough skip
             if showroom_item.balance < dealer_price:
                 continue
-
-            # # if count of cars = 0
-            # if d_car.count <= 0:
-            #     continue
-
-            # check what is happened!
-            with open('cars.txt', 'a') as f:
-                f.write(f'3_dealer: - car_inst:{d_car} - car_count:{d_car.count} - car_price:{dealer_price} \n')
 
             # instances for recording to DB
             showroom_car = Car.objects.get(pk=d_car.car.pk)
@@ -75,16 +58,15 @@ def buy_car_from_dealer():
                     showroom=showroom_item,
                     dealer=dealer_profile,
                     # price=dealer_price
-
-
                 )
-                if result[1]:
-                    result[0].price = dealer_price + ((dealer_price * 30) / 100)
-                    result[0].save()
-                # if result == False (item already exist), then increase count +1
 
+                if result[1]:
+                    result[0].price = dealer_price + ((dealer_price * 10) / 100)
+                    result[0].save()
+
+                # if result == False (item already exist), then increase count +1
                 if not result[1]:
-                    result[0].price = dealer_price + ((dealer_price * 30) / 100)  # increase price before selling
+                    result[0].price = dealer_price + ((dealer_price * 10) / 100)  # increase price before selling
                     result[0].count += 1
                     result[0].is_active = True
                     result[0].save()
@@ -120,25 +102,28 @@ def buy_car_from_showroom():
     for customer_item in CustomerProfile.objects.all():
         # create query showroom
         query = customer_item.customer_query
+        print('rr', customer_item)
 
         # select 2 fields from query instance (dictionary)
         # we can select all fields
         query_make = query.get("make")
         query_model = query.get("model")
 
-        # check what is happened!
-        with open('cars.txt', 'a') as f:
-            f.write(f'41_showroom-{query_make} - {query_model}  -{customer_item.pk}-\n')
-
         # creating QuerySet that matches the showroom's query
         showroom_car = ShowroomCar.objects.filter(
             Q(car__make__iexact=query_make) |
             Q(car__model__iexact=query_model)
-
         )
+
         for sh_car in showroom_car:
             # select price
             showroom_price = sh_car.price
+
+            # check sales
+            if ShowroomSales.objects.filter(car__pk=sh_car.car.pk).exists():
+                item = ShowroomSales.objects.get(car__pk=sh_car.car.pk)
+                if item.is_active:
+                    showroom_price = showroom_price - (item.discount * showroom_price)
 
             if sh_car.count == 0:
                 continue
@@ -146,10 +131,6 @@ def buy_car_from_showroom():
             # if money is not enough
             if customer_item.balance < showroom_price:
                 continue
-
-            # check what is happened!
-            with open('cars.txt', 'a') as f:
-                f.write(f'42_dealer{sh_car} - {showroom_price} \n')
 
             # instances for recording to DB
             customer_car = Car.objects.get(pk=sh_car.car.pk)
@@ -193,5 +174,4 @@ def buy_car_from_showroom():
                     showroom=showroom_profile,
                     price=showroom_price,
                     count=1,
-
                 )

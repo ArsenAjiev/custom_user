@@ -18,7 +18,8 @@ class DealerSales(models.Model):
     is_active = models.BooleanField()
 
     def __str__(self):
-        return f" Title:{self.title} -- Discount:{self.discount} --Car: {self.car.model} -- Dealer:{self.dealer.owner}"
+        return f" Title:{self.title} -- Discount:{self.discount} --Car: {self.car.make}  -- Model: {self.car.model} \
+        -- Dealer:{self.dealer.owner} -- Is_active:{self.is_active}"
 
 
 class ShowroomSales(models.Model):
@@ -34,4 +35,5 @@ class ShowroomSales(models.Model):
     is_active = models.BooleanField()
 
     def __str__(self):
-        return f" Title:{self.title} -- Discount:{self.discount} -- Car:{self.car.model} --Showroom:{self.showroom.name}"
+        return f" Title:{self.title} -- Discount:{self.discount} -- Car:{self.car.make} -- Model: {self.car.model} \
+         --Showroom:{self.showroom.name} -- Is_active:{self.is_active}"
